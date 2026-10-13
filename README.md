@@ -1,20 +1,31 @@
 
 # Twitch Drops Miner - Custom
 
-This project is a fork of [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/TwitchDropsMiner) with some custom alterations.
+This project is a fork of [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/TwitchDropsMiner) with some custom alterations, mainly intended to improve the overall user experience.
 
 ## Features
 
-- Typing in the Exclude or Priority comboboxes on the `Settings` menu now filters the games list
+- Typing in the Exclude or Priority comboboxes on the `Settings` menu now filters the games list.
 
+- The `upcoming` filter in the `inventory` menu is locked on as toggling it changes nothing.
+
+## Expected changes
+
+- General QOL changes
+
+- Bugfixes to bugs that TDM has:
+  - KeyError login crash
+  - Non-existent channel error message
+
+- Some form of update notifier
+
+- Drops reward list sorting by watchtime a reward takes to earn
 
 ## Support
 
-For support, make an issue - if DevilXD's stops working, mine won't either
-
+For support, make an issue - if DevilXD's stops working, mine won't either.
 
 ## Credits
-
 
 @DevilXD - For the original miner.
 

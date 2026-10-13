@@ -1265,9 +1265,11 @@ class InventoryOverview:
             text=_("gui", "inventory", "filter", "not_linked"),
             padding=(0, 0, LABEL_SPACING, 0),
         ).grid(column=(icolumn := icolumn + 1), row=0)
-        ttk.Checkbutton(
+        upcoming_button = ttk.Checkbutton(
             filter_frame, variable=self._filters["upcoming"]
-        ).grid(column=(icolumn := icolumn + 1), row=0)
+        )
+        upcoming_button.grid(column=(icolumn := icolumn + 1), row=0)
+        upcoming_button.state(['disabled', 'selected'])
         ttk.Label(
             filter_frame,
             text=_("gui", "inventory", "filter", "upcoming"),
