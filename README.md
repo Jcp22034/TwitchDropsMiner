@@ -5,9 +5,9 @@ This project is a fork of [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/
 
 ## Features
 
-- Typing in the Exclude or Priority comboboxes on the `Settings` menu now filters the games list.
+- Typing in the `Exclude` or `Priority` comboboxes on the `Settings` menu now filters the games list.
 
-- The `upcoming` filter in the `inventory` menu is locked on as toggling it changes nothing.
+- The `upcoming` filter in the `Inventory` menu is locked on as toggling it changes nothing.
 
 ## Expected changes
 
@@ -19,7 +19,9 @@ This project is a fork of [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/
 
 - Some form of update notifier
 
-- Drops reward list sorting by watchtime a reward takes to earn
+- Campaign drops reward list sorting by watchtime a reward takes to earn - IN PROGRESS
+
+- Scroll bar resizing on updating `inventory` menu campaigns list (when no campaigns are available)
 
 ## Support
 

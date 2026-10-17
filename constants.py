@@ -129,7 +129,7 @@ PING_TIMEOUT = timedelta(seconds=10)
 ONLINE_DELAY = timedelta(seconds=120)
 WATCH_INTERVAL = timedelta(seconds=20)
 # Strings
-WINDOW_TITLE = f"Twitch Drops Miner v{__version__} (by DevilXD)"
+WINDOW_TITLE = f"Twitch Drops Miner - Custom v{__version__} (by DevilXD & Jcp22034)"
 # Logging
 LOGGING_LEVELS = {
     0: logging.ERROR,

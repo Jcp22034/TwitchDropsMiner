@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from operator import attrgetter
 import re
 import math
 import logging
@@ -358,6 +359,19 @@ class DropsCampaign:
             drop_data["id"]: TimedDrop(self, drop_data, claimed_benefits)
             for drop_data in data["timeBasedDrops"]
         }
+        #Is this even needed? how does it mess up where it is idk
+        # Now we sort by required_minutes. is_claimed is used when claimed to put on the end
+        if len(self.timed_drops) > 1: # We don't need to run on 1 item
+            self._timed_drops = sorted(
+                [self.timed_drops[drop_data]
+                for drop_data in self.timed_drops],
+                key = attrgetter('is_claimed', 'required_minutes', 'name') # Maybe also claimed because 0 -> 1 is ascending
+            )
+            self.timed_drops: dict[str, TimedDrop] = {
+                drop_data.id: drop_data
+                for drop_data in self._timed_drops
+            }
+            del self._timed_drops
 
     def __repr__(self) -> str:
         return f"Campaign({self.game!s}, {self.name}, {self.claimed_drops}/{self.total_drops})"
@@ -435,7 +449,7 @@ class DropsCampaign:
     def first_drop(self) -> TimedDrop | None:
         drops: list[TimedDrop] = sorted(
             (drop for drop in self.drops if drop.can_earn()),
-            key=lambda d: d.remaining_minutes,
+            key=attrgetter('remaining_minutes'),
         )
         return drops[0] if drops else None
 

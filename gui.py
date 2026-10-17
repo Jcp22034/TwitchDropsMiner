@@ -1079,7 +1079,7 @@ class ChannelList:
 
 
 class TrayIcon:
-    TITLE = "Twitch Drops Miner"
+    TITLE = "Twitch Drops Miner - Custom"
 
     def __init__(self, manager: GUIManager, master: ttk.Widget):
         self._manager = manager
@@ -1473,6 +1473,7 @@ class InventoryOverview:
         drops_row = ttk.Frame(campaign_frame)
         drops_row.grid(column=3, row=0, rowspan=5, sticky="nsew", padx=4)
         drops_row.rowconfigure(0, weight=1)
+
         for i, drop in enumerate(campaign.drops):
             drop_frame = ttk.Frame(drops_row, relief="ridge", borderwidth=1, padding=5)
             drop_frame.grid(column=i, row=0, padx=4)
@@ -1491,6 +1492,7 @@ class InventoryOverview:
             self._drops[drop.id] = label = ttk.Label(drop_frame, justify=tk.CENTER)
             self.update_progress(drop, label)
             label.grid(column=0, row=1)
+        _slaves = drops_row.grid_slaves()
         if self._manager.tabs.current_tab() == 1:
             self._update_visibility(campaign)
             self._canvas_update()
@@ -1510,6 +1512,14 @@ class InventoryOverview:
         elif drop.can_claim:
             progress_color = "goldenrod"
             progress_text = _("gui", "inventory", "status", "ready_to_claim")
+            # For efficiency, do this only on ready to claim so it doesn't
+            # mass trigger on startup is_claimed updates
+            curr_drop_frame: ttk.Frame = label.master
+            curr_drop_frame.forget() # Hide the list entry to add it later
+            drops_list: list[ttk.Frame] = curr_drop_frame.master.grid_slaves()
+            for i, drop_frame in enumerate(drops_list):
+                drop_frame.grid_configure(column=i, row=0, padx=4)
+            curr_drop_frame.grid(column=len(drops_list), row=0, padx=4)
         elif drop.current_minutes or drop.can_earn():
             progress_text = _("gui", "inventory", "percent_progress").format(
                 percent=f"{drop.progress:3.1%}",
@@ -1938,7 +1948,7 @@ class SettingsPanel:
                     f"""
                     [Desktop Entry]
                     Type=Application
-                    Name=Twitch Drops Miner
+                    Name=Twitch Drops Miner Custom
                     Description=Mine timed drops on Twitch
                     Exec=sh -c '{self._get_autostart_path()}'
                     """
@@ -2125,32 +2135,44 @@ class HelpTab:
         about.columnconfigure(2, weight=1)
         # About - created by
         ttk.Label(
-            about, text="Application created by: ", anchor="e"
+            about, text="Originally created by: ", anchor="e"
         ).grid(column=0, row=0, sticky="nsew")
         LinkLabel(
             about, link="https://github.com/DevilXD", text="DevilXD"
         ).grid(column=1, row=0, sticky="nsew")
         # About - repo link
-        ttk.Label(about, text="Repository: ", anchor="e").grid(column=0, row=1, sticky="nsew")
+        ttk.Label(about, text="Original repository: ", anchor="e").grid(column=0, row=1, sticky="nsew")
         LinkLabel(
             about,
             link="https://github.com/DevilXD/TwitchDropsMiner",
             text="https://github.com/DevilXD/TwitchDropsMiner",
         ).grid(column=1, row=1, sticky="nsew")
+        ttk.Label(
+            about, text="Fork by: ", anchor="e"
+        ).grid(column=0, row=2, sticky="nsew")
+        LinkLabel(
+            about, link="https://github.com/Jcp22034", text="Jcp22034"
+        ).grid(column=1, row=2, sticky="nsew")
+        ttk.Label(about, text="Fork repository: ", anchor="e").grid(column=0, row=3, sticky="nsew")
+        LinkLabel(
+            about,
+            link="https://github.com/Jcp22034/TwitchDropsMiner",
+            text="https://github.com/Jcp22034/TwitchDropsMiner",
+        ).grid(column=1, row=3, sticky="nsew")
         # About - donate
         ttk.Separator(
             about, orient="horizontal"
-        ).grid(column=0, row=2, columnspan=3, sticky="nsew")
-        ttk.Label(about, text="Donate: ", anchor="e").grid(column=0, row=3, sticky="nsew")
+        ).grid(column=0, row=4, columnspan=3, sticky="nsew")
+        ttk.Label(about, text="Donate: ", anchor="e").grid(column=0, row=5, sticky="nsew")
         LinkLabel(
             about,
             link="https://www.buymeacoffee.com/DevilXD",
             text=(
                 "If you like the application and found it useful, "
-                "please consider donating a small amount of money to support me. Thank you!"
+                "please consider donating a small amount of money to support DevilXD. Thank you!"
             ),
             wraplength=self.WIDTH,
-        ).grid(column=1, row=3, sticky="nsew")
+        ).grid(column=1, row=5, sticky="nsew")
         # Useful links
         links = ttk.LabelFrame(
             center_frame, padding=(4, 0, 4, 4), text=_("gui", "help", "links", "name")
