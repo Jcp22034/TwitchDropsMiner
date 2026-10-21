@@ -21,12 +21,13 @@ from datetime import datetime, timezone
 from collections import abc, OrderedDict
 from typing import Any, Literal, Callable, Generic, Mapping, TypeVar, ParamSpec, cast
 
+import aiohttp
 from yarl import URL
 from PIL.ImageTk import PhotoImage
 from PIL import Image as Image_module
 
 from exceptions import ExitRequest, ReloadRequest
-from constants import IS_PACKAGED, JsonType, PriorityMode
+from constants import GITHUB_COMMITS_HISTORY, IS_PACKAGED, VERSION, JsonType, PriorityMode
 from constants import _resource_path as resource_path  # noqa
 
 
@@ -456,3 +457,33 @@ class Game:
 
     def is_special(self) -> bool:
         return self.id in self.SPECIAL_GAME_IDS
+
+async def needs_update_check() -> bool:
+    logger.info("Checking for updates...")
+    async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(10)) as session:
+        async with session.get(GITHUB_COMMITS_HISTORY,
+                params={'page': 1, 'per_page': 1}) as response:
+            if response.status != 200:
+                logger.warning("Error trying to update: Response code", response.status)
+                return False
+
+            # Load the JSON
+            response_json: list[JsonType] = await response.json()
+            commit_entry = response_json[0]
+            commit_hash = commit_entry.get('sha')
+            if not commit_hash:
+                logger.warning("Error trying to update: Invalid respose", await response.json())
+                return False
+
+            # No update if debugging dev build
+            if len(VERSION.split('.')) != 3:
+                logger.info("Update check complete, no updates found")
+                return False
+
+            if commit_hash[:7] == VERSION.split('.')[2]:
+                logger.info("Update check complete, no updates found")
+                return False
+
+            logger.info("Update check completed, updates found")
+            return True
+

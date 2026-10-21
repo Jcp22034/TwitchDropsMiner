@@ -130,6 +130,9 @@ ONLINE_DELAY = timedelta(seconds=120)
 WATCH_INTERVAL = timedelta(seconds=20)
 # Strings
 WINDOW_TITLE = f"Twitch Drops Miner - Custom v{__version__} (by DevilXD & Jcp22034)"
+VERSION = __version__
+GITHUB_REPO = "https://api.github.com/repos/Jcp22034/TwitchDropsMiner"
+GITHUB_COMMITS_HISTORY = GITHUB_REPO + "/commits"
 # Logging
 LOGGING_LEVELS = {
     0: logging.ERROR,

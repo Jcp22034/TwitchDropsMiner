@@ -189,6 +189,11 @@ class GUISettings(TypedDict):
     exclude: str
     reload: str
     reload_text: str
+    update: str
+    update_text: str
+    update_check: str
+    update_wait: str
+    no_update: str
 
 
 class GUIHelpLinks(TypedDict):
@@ -402,6 +407,11 @@ default_translation: Translation = {
             "exclude": "Exclude",
             "reload": "Reload",
             "reload_text": "Most changes require a reload to take an immediate effect: ",
+            "update_check": "Check",
+            "update_text": "Check for newer versions: ",
+            "update": "Click to update",
+            "update_wait": "...",
+            "no_update": "No new versions",
         },
         "help": {
             "links": {

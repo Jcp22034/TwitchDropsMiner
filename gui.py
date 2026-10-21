@@ -36,7 +36,7 @@ if sys.platform == "darwin":
 from translate import _
 from cache import ImageCache
 from exceptions import MinerException, ExitRequest
-from utils import resource_path, set_root_icon, webopen, task_wrapper, Game, _T
+from utils import needs_update_check, resource_path, set_root_icon, webopen, task_wrapper, Game, _T
 from constants import (
     MAX_INT,
     SELF_PATH,
@@ -1852,14 +1852,41 @@ class SettingsPanel:
         ).grid(column=0, row=2, columnspan=2, sticky="nsew")
 
         # Reload button
-        reload_frame = ttk.Frame(center_frame)
-        reload_frame.grid(column=0, row=2, columnspan=3, pady=4)
-        ttk.Label(reload_frame, text=_("gui", "settings", "reload_text")).grid(column=0, row=0)
+        self.reload_frame = ttk.Frame(center_frame)
+        self.reload_frame.grid(column=0, row=2, columnspan=3, pady=4)
+        ttk.Label(self.reload_frame, text=_("gui", "settings", "reload_text")).grid(column=0, row=0)
         ttk.Button(
-            reload_frame,
+            self.reload_frame,
             text=_("gui", "settings", "reload"),
             command=self._manager._twitch.state_change(State.INVENTORY_FETCH),
         ).grid(column=1, row=0)
+
+        # Update checker
+        ttk.Label(self.reload_frame,
+            text=_("gui", "settings", "update_text")).grid(column=0, row=1)
+        self.update_button = ttk.Button(
+            self.reload_frame,
+            text=_("gui", "settings", "update_check"),
+            command=self.check_update
+        )
+        self.update_button.grid(column=1,row=1)
+
+    def check_update(self) -> None:
+        # Sync this up with async
+        asyncio.create_task(self._check_update())
+
+    async def _check_update(self) -> None:
+        self.update_button.configure(text=_("gui", "settings", "update_wait"))
+        needs_update = await needs_update_check()
+        if needs_update:
+            self.update_button.configure(text=_("gui", "settings", "update"),
+                command=self._w_open)
+        else:
+            self.update_button.configure(text=_("gui", "settings", "no_update"))
+
+
+    def _w_open(self):
+        webopen('https://www.github.com/Jcp22034/TwitchDropsMiner/releases')
 
     def clear_selection(self) -> None:
         self._priority_list.selection_clear(0, "end")
