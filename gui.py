@@ -1385,7 +1385,6 @@ class InventoryOverview:
             new_canvas_size = (0, 0, max(canvas_size[2], 200), max(canvas_size[3], 50))
         else:
             new_canvas_size = (0, 0, 200, 50)
-        print("Canvas", new_canvas_size)
         self._canvas.configure(scrollregion=new_canvas_size)
 
     def _on_mousewheel(self, event: tk.Event[tk.Misc]):
