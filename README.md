@@ -7,7 +7,11 @@ This project is a fork of [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/
 
 - Typing in the `Exclude` or `Priority` comboboxes on the `Settings` menu now filters the games list.
 
-- The `upcoming` filter in the `Inventory` menu is locked on as toggling it changes nothing.
+- The `Settings` tab now has an update checking button that opens the github releases webpage.
+
+- The `upcoming` filter in the `Inventory` tab is locked on as toggling it changes nothing.
+
+- The scroll bar on the `Inventory` tab should now be proportional when no campaigns can be shown.
 
 ## Expected changes
 
@@ -17,11 +21,7 @@ This project is a fork of [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/
   - KeyError login crash
   - Non-existent channel error message
 
-- Some form of update notifier
-
 - Campaign drops reward list sorting by watchtime a reward takes to earn - IN PROGRESS
-
-- Scroll bar resizing on updating `inventory` menu campaigns list (when no campaigns are available)
 
 ## Support
 
