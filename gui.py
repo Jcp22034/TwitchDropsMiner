@@ -1322,6 +1322,9 @@ class InventoryOverview:
         self._campaigns: dict[DropsCampaign, CampaignDisplay] = {}
         self._drops: dict[str, ttk.Label] = {}
 
+        self._prev_canvas_size = (0, 0, 0, 0)
+        self._prev_filters = [0, 1, 0, 0, 0]
+
     def configure_theme(self, *, bg: str):
         # Canvas background needs manual control
         self._canvas.configure(bg=bg)
@@ -1381,10 +1384,22 @@ class InventoryOverview:
     def _canvas_update(self, event: tk.Event[tk.Canvas] | None = None):
         self._canvas.update_idletasks()
         canvas_size = self._canvas.bbox("all")
-        if canvas_size:
-            new_canvas_size = (0, 0, max(canvas_size[2], 200), max(canvas_size[3], 50))
-        else:
+        filters = [
+            bool(self._filters["not_linked"].get()),
+            1,
+            bool(self._filters["expired"].get()),
+            bool(self._filters["excluded"].get()),
+            bool(self._filters["finished"].get())
+        ]
+
+        # It always returns the previous value if we have no campaigns to show
+        if canvas_size == self._prev_canvas_size and self._prev_filters != filters:
             new_canvas_size = (0, 0, 200, 50)
+        else:
+            new_canvas_size = (0, 0, canvas_size[2], canvas_size[3])
+
+        self._prev_canvas_size = new_canvas_size
+        self._prev_filters = filters
         self._canvas.configure(scrollregion=new_canvas_size)
 
     def _on_mousewheel(self, event: tk.Event[tk.Misc]):
@@ -1497,7 +1512,6 @@ class InventoryOverview:
             self._drops[drop.id] = label = ttk.Label(drop_frame, justify=tk.CENTER)
             self.update_progress(drop, label)
             label.grid(column=0, row=1)
-        _slaves = drops_row.grid_slaves()
         if self._manager.tabs.current_tab() == 1:
             self._update_visibility(campaign)
             self._canvas_update()

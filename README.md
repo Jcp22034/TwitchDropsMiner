@@ -21,7 +21,7 @@ This project is a fork of [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/
   - KeyError login crash
   - Non-existent channel error message
 
-- Campaign drops reward list sorting by watchtime a reward takes to earn - IN PROGRESS
+- Campaign drops reward list sorting by watchtime a reward takes to earn - IN PROGRESS, bugged somehow lol
 
 ## Support
 
