@@ -1322,9 +1322,6 @@ class InventoryOverview:
         self._campaigns: dict[DropsCampaign, CampaignDisplay] = {}
         self._drops: dict[str, ttk.Label] = {}
 
-        self._prev_canvas_size = (0, 0, 0, 0)
-        self._prev_filters = [0, 1, 0, 0, 0]
-
     def configure_theme(self, *, bg: str):
         # Canvas background needs manual control
         self._canvas.configure(bg=bg)
@@ -1383,23 +1380,11 @@ class InventoryOverview:
 
     def _canvas_update(self, event: tk.Event[tk.Canvas] | None = None):
         self._canvas.update_idletasks()
-        canvas_size = self._canvas.bbox("all")
-        filters = [
-            bool(self._filters["not_linked"].get()),
-            1,
-            bool(self._filters["expired"].get()),
-            bool(self._filters["excluded"].get()),
-            bool(self._filters["finished"].get())
-        ]
-
-        # It always returns the previous value if we have no campaigns to show
-        if canvas_size == self._prev_canvas_size and self._prev_filters != filters:
-            new_canvas_size = (0, 0, 200, 50)
+        if not self._main_frame.grid_slaves():
+            new_canvas_size = (0, 0, 0, 0)
         else:
+            canvas_size = self._canvas.bbox("all")
             new_canvas_size = (0, 0, canvas_size[2], canvas_size[3])
-
-        self._prev_canvas_size = new_canvas_size
-        self._prev_filters = filters
         self._canvas.configure(scrollregion=new_canvas_size)
 
     def _on_mousewheel(self, event: tk.Event[tk.Misc]):
@@ -1536,9 +1521,11 @@ class InventoryOverview:
             curr_drop_frame: ttk.Frame = label.master
             curr_drop_frame.forget() # Hide the list entry to add it later
             drops_list: list[ttk.Frame] = curr_drop_frame.master.grid_slaves()
+            #i = 0
             for i, drop_frame in enumerate(drops_list):
                 drop_frame.grid_configure(column=i, row=0, padx=4)
-            curr_drop_frame.grid(column=len(drops_list), row=0, padx=4)
+            curr_drop_frame.grid(column=i + 1, row=0, padx=4)
+            #print(i + 1)
         elif drop.current_minutes or drop.can_earn():
             progress_text = _("gui", "inventory", "percent_progress").format(
                 percent=f"{drop.progress:3.1%}",
