@@ -11,17 +11,17 @@ This project is a fork of [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/
 
 - The `upcoming` filter in the `Inventory` tab is locked on as toggling it changes nothing.
 
-- The scroll bar on the `Inventory` tab should now be proportional when no campaigns can be shown.
+- The scroll bar on the `Inventory` tab is now proportional when no campaigns can be shown.
+
+- All campaign drops rewards are sorted by the watchtime it takes to earn.
 
 ## Expected changes
 
 - General QOL changes
 
 - Bugfixes to bugs that TDM has:
-  - KeyError login crash
+  - ~~KeyError login crash~~ - This has been fixed in the main miner
   - Non-existent channel error message
-
-- Campaign drops reward list sorting by watchtime a reward takes to earn - IN PROGRESS, bugged somehow lol
 
 ## Support
 

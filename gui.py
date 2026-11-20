@@ -1519,13 +1519,12 @@ class InventoryOverview:
             # For efficiency, do this only on ready to claim so it doesn't
             # mass trigger on startup is_claimed updates
             curr_drop_frame: ttk.Frame = label.master
-            curr_drop_frame.forget() # Hide the list entry to add it later
+            curr_drop_frame.grid_forget() # Hide the list entry to add it later
             drops_list: list[ttk.Frame] = curr_drop_frame.master.grid_slaves()
-            #i = 0
+            drops_list.sort(key=lambda frame: int(frame.grid_info()["column"]))
             for i, drop_frame in enumerate(drops_list):
                 drop_frame.grid_configure(column=i, row=0, padx=4)
-            curr_drop_frame.grid(column=i + 1, row=0, padx=4)
-            #print(i + 1)
+            curr_drop_frame.grid(column=len(drops_list), row=0, padx=4)
         elif drop.current_minutes or drop.can_earn():
             progress_text = _("gui", "inventory", "percent_progress").format(
                 percent=f"{drop.progress:3.1%}",
